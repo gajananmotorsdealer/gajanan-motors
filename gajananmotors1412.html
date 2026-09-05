@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Gajanan Motors</title>
+
+  <style>
+    :root{
+      /* Lighter theme colors */
+      --page-bg: #f6f8fa;        /* overall page background (very light) */
+      --surface: #ffffff;        /* card / panel background */
+      --muted: #6b7280;          /* secondary text */
+      --text: #0f1724;           /* main text */
+      --accent: #0d6efd;         /* primary accent (blue) */
+      --accent-2: #2563eb;
+      --shadow: rgba(12, 24, 55, 0.08);
+      --container: 1100px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body{
+      margin: 0;
+      font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+      background: linear-gradient(180deg, var(--page-bg) 0%, #eef2f6 100%);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      line-height: 1.6;
+      scroll-behavior: smooth;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* Header */
+    .site-header{
+      position: sticky;
+      top: 0;
+      z-index: 120;
+      background: rgba(255,255,255,0.95);
+      padding: 12px 6%;
+      border-bottom: 1px solid rgba(15, 23, 36, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      backdrop-filter: blur(4px);
+      box-shadow: 0 6px 18px var(--shadow);
+    }
+    .logo { display:flex; flex-direction:column; }
+    .logo h1 { margin: 0; font-size: 20px; color: var(--text); }
+    .logo p { margin: 3px 0 0; font-size: 12px; color: var(--muted); }
+
+    nav.site-nav { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+    nav.site-nav a {
+      color: var(--muted);
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: background .14s, color .14s, transform .12s;
+    }
+    nav.site-nav a:hover, nav.site-nav a.active {
+      color: var(--text);
+      background: linear-gradient(90deg, rgba(13,110,253,0.06), rgba(37,99,235,0.04));
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(13,110,253,0.06);
+    }
+
+    /* Page container */
+    .container { max-width: var(--container); margin: 0 auto; padding: 0 18px; }
+
+    /* Sections */
+    section { padding: 56px 0; border-bottom: 1px solid rgba(15,23,36,0.04); }
+    .section-title { font-size: 28px; text-align:center; margin: 0 0 10px; color: var(--text); }
+    .muted { color: var(--muted); text-align:center; margin-bottom: 18px; }
+
+    /* Hero */
+    .hero {
+      padding: 52px;
+      text-align: center;
+      background: linear-gradient(180deg, var(--surface), #f8fafc);
+      border-radius: 10px;
+      box-shadow: 0 10px 30px var(--shadow);
+      border: 1px solid rgba(15,23,36,0.03);
+    }
+    .hero h2 { font-size: 34px; margin: 0 0 8px; color: var(--text); }
+    .hero p { max-width: 900px; margin: 0 auto; color: #374151; font-size: 15px; }
+    .cta {
+      display: inline-block;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      color: #fff; padding: 12px 20px; margin: 12px 8px; border-radius: 8px;
+      font-weight: 600; text-decoration: none; box-shadow: 0 8px 22px rgba(13,110,253,0.12);
+    }
+
+    /* Cards / info box */
+    .info-box {
+      background: var(--surface);
+      padding: 18px;
+      border-radius: 10px;
+      border: 1px solid rgba(15,23,36,0.04);
+      color: #0f1724;
+      box-shadow: 0 8px 20px var(--shadow);
+    }
+
+    /* About layout */
+    .about-grid { display: grid; grid-template-columns: 1fr 380px; gap: 20px; align-items: start; }
+    .about-grid ul, .about-grid ol { color: var(--muted); margin: 0; padding-left: 18px; }
+
+    /* Gallery: only images */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+    .image-item {
+      width: 100%;
+      height: 320px;
+      object-fit: cover;
+      border-radius: 10px;
+      display: block;
+      border: 1px solid rgba(15,23,36,0.06);
+      box-shadow: 0 12px 30px rgba(12,24,55,0.06);
+      cursor: pointer;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .image-item:hover {
+      transform: translateY(-6px) scale(1.01);
+      box-shadow: 0 30px 70px rgba(12,24,55,0.10);
+    }
+
+    /* Cards grid for services */
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-top: 18px; }
+    .card { background: var(--surface); padding: 18px; border-radius: 10px; border: 1px solid rgba(15,23,36,0.04); box-shadow: 0 8px 20px var(--shadow); color: var(--text); }
+
+    /* Forms */
+    label { display: block; margin-top: 12px; font-weight: 600; color: var(--text); }
+    input, select, textarea {
+      width: 100%; padding: 10px; margin-top: 6px; border-radius: 8px;
+      background: #fbfdff; border: 1px solid rgba(15,23,36,0.06); color: var(--text); font-size: 14px;
+    }
+    textarea { min-height: 120px; resize: vertical; }
+
+    /* Contact layout */
+    .contact-grid { display: grid; grid-template-columns: 1fr 420px; gap: 18px; }
+
+    /* Lightbox viewer - keep dark overlay for images */
+    .lightbox {
+      position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
+      background: rgba(3,7,18,0.86); z-index: 9999; padding: 16px;
+    }
+    .lightbox.open { display: flex; }
+    .viewer { position: relative; max-width: 1200px; width: 100%; max-height: 92vh; display: flex; align-items: center; justify-content: center; }
+    .viewer img { max-width: 100%; max-height: 92vh; object-fit: contain; border-radius: 8px; cursor: pointer; }
+    .control {
+      position: absolute; background: rgba(255,255,255,0.06); color: #fff; border: none;
+      padding: 10px 12px; border-radius: 8px; cursor: pointer; font-weight: 700; user-select: none;
+      backdrop-filter: blur(4px);
+    }
+    .close { top: 10px; right: 10px; }
+    .prev { left: 10px; top: 50%; transform: translateY(-50%); }
+    .next { right: 10px; top: 50%; transform: translateY(-50%); }
+
+    /* Footer */
+    footer.site-footer { padding: 20px 0; text-align: center; color: var(--muted); margin-top: 28px; border-top: 1px solid rgba(15,23,36,0.04); }
+
+    /* Responsive tweaks */
+    @media (max-width: 980px) {
+      .about-grid { grid-template-columns: 1fr; }
+      .contact-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 760px) {
+      .image-item { height: 220px; }
+      .hero h2 { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header" role="banner">
+    <div class="container" style="display:flex;align-items:center;justify-content:space-between;padding:0">
+      <div class="logo" style="flex:0 0 auto">
+        <h1>Gajanan Motors</h1>
+        <p>Premium Cars, Honest Deals.</p>
+      </div>
+
+      <nav class="site-nav" aria-label="Main navigation" style="flex:1 1 auto;justify-self:end;display:flex;justify-content:flex-end">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#services">Services</a>
+        <a href="#sell">Sell</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- HOME / HERO -->
+    <section id="home" aria-labelledby="home-heading">
+      <div class="hero">
+        <h2 id="home-heading">Premium Cars, Honest Deals.</h2>
+        <p>Welcome to Gajanan Motors — a trusted dealer of carefully inspected pre-owned vehicles. Browse our photo gallery, learn about what we offer, or submit a quick sell inquiry.</p>
+        <div style="margin-top:14px">
+          <a class="cta" href="#gallery">View Gallery</a>
+          <a class="cta" href="#sell">Sell Your Car</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT (expanded) -->
+    <section id="about" aria-labelledby="about-heading">
+      <h2 class="section-title" id="about-heading">About Gajanan Motors</h2>
+      <p class="muted">Honesty, inspection, and customer-first service — that is our promise.</p>
+
+      <div class="about-grid">
+        <div>
+          <div class="info-box">
+            <h3 style="margin-top:0">Who we are</h3>
+            <p>Gajanan Motors is a family-run pre-owned car dealer established to make buying and selling used cars simpler and more reliable. We focus on accurate condition reporting, fair pricing and friendly service to help customers make confident decisions.</p>
+          </div>
+
+          <div style="margin-top:14px" class="info-box">
+            <h3 style="margin-top:0">How we work</h3>
+            <ol>
+              <li>Initial appraisal and photo review</li>
+              <li>Multi-point inspection by our technicians</li>
+              <li>Clear condition report and honest valuation</li>
+              <li>Facilitate test-drive and paperwork assistance</li>
+              <li>After-sale support and guidance</li>
+            </ol>
+          </div>
+
+          <div style="margin-top:14px" class="info-box">
+            <h3 style="margin-top:0">Our values</h3>
+            <p style="margin:0">Integrity, transparency and respect for customers' time and investment. We disclose inspection results and provide straight answers.</p>
+          </div>
+
+          <div style="margin-top:14px" class="info-box">
+            <h3 style="margin-top:0">Testimonials</h3>
+            <blockquote style="margin:0;color:var(--muted)">"Quick, transparent and fair — I found a great family car within a week." — S. Patel</blockquote>
+            <p style="color:var(--muted);margin-top:8px">"Sold my car without hassle — professional and friendly team." — R. Sharma</p>
+          </div>
+        </div>
+
+        <aside>
+          <div class="info-box">
+            <h3 style="margin-top:0">Why choose us</h3>
+            <ul style="margin:0;padding-left:18px;color:var(--muted)">
+              <li>Certified inspections</li>
+              <li>Clear, written condition reports</li>
+              <li>Fair valuations based on market data</li>
+              <li>Fast, friendly support</li>
+            </ul>
+            <p style="color:var(--muted);margin-top:10px">Visit the Gallery to see current vehicles or use the Sell form to submit your car details.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section id="gallery" aria-labelledby="gallery-heading">
+      <h2 class="section-title" id="gallery-heading">Car Photos</h2>
+      <p class="muted">Only photos — click any image to open the viewer. Click the large image or Next to advance.</p>
+
+      <div class="gallery-grid" id="galleryGrid" role="list">
+        <img class="image-item" data-index="0" src="https://i.ibb.co/QFq5NX6j/imagesgajanan-car3-jpg.jpg" alt="Car photo 1" loading="lazy">
+        <img class="image-item" data-index="1" src="https://i.ibb.co/TDQxn4wH/imagesgajanan-car2-jpg.jpg" alt="Car photo 2" loading="lazy">
+        <img class="image-item" data-index="2" src="https://i.ibb.co/qY3hXS1q/imagesgajanan-car1-jpg.jpg" alt="Car photo 3" loading="lazy">
+        <img class="image-item" data-index="3" src="https://i.ibb.co/Zp0Rf7JV/imagesgajanan-car3-jpg.jpg" alt="Car photo 4" loading="lazy">
+        <img class="image-item" data-index="4" src="https://i.ibb.co/wFsQ20CQ/imagesgajanan-car2-jpg.jpg" alt="Car photo 5" loading="lazy">
+        <img class="image-item" data-index="5" src="https://i.ibb.co/rgKm5dL/imagesgajanan-car1-jpg.jpg" alt="Car photo 6" loading="lazy">
+        <img class="image-item" data-index="6" src="https://i.ibb.co/QvFpwx5y/imagesgajanan-car2-jpg.jpg" alt="Car photo 7" loading="lazy">
+        <img class="image-item" data-index="7" src="https://i.ibb.co/RGpL6Swk/imagesgajanan-car1-jpg.jpg" alt="Car photo 8" loading="lazy">
+      </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section id="services" aria-labelledby="services-heading">
+      <h2 class="section-title" id="services-heading">Our Services</h2>
+      <p class="muted">Comprehensive support for buyers and sellers.</p>
+
+      <div class="cards" role="list">
+        <div class="card" role="listitem">
+          <h3 style="margin-top:0">Multi-point Inspection</h3>
+          <p style="margin:0;color:var(--muted)">Thorough checks of engine, brakes, electronics and bodywork to produce a clear condition report.</p>
+        </div>
+
+        <div class="card" role="listitem">
+          <h3 style="margin-top:0">Test Drives</h3>
+          <p style="margin:0;color:var(--muted)">Book a test drive at a time that suits you; we prepare the vehicle and paperwork.</p>
+        </div>
+
+        <div class="card" role="listitem">
+          <h3 style="margin-top:0">Valuation & Selling</h3>
+          <p style="margin:0;color:var(--muted)">Fair market valuations and assistance to get your car sold securely.</p>
+        </div>
+
+        <div class="card" role="listitem">
+          <h3 style="margin-top:0">Paperwork Assistance</h3>
+          <p style="margin:0;color:var(--muted)">Help with ownership transfer and documents to avoid delays and errors.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SELL -->
+    <section id="sell" aria-labelledby="sell-heading">
+      <h2 class="section-title" id="sell-heading">Sell Your Car</h2>
+      <p class="muted">Share basic details — we'll contact you with a valuation.</p>
+
+      <div style="display:grid;grid-template-columns:1fr 420px;gap:18px;align-items:start">
+        <div>
+          <div class="info-box">
+            <h3 style="margin-top:0">Selling process</h3>
+            <ol style="color:var(--muted);margin:0 0 0 18px;padding:0">
+              <li>Submit the quick form with photos or links</li>
+              <li>We review and book a short inspection</li>
+              <li>Receive a fair written valuation and proceed if agreeable</li>
+            </ol>
+          </div>
+
+          <div class="info-box" style="margin-top:12px">
+            <h3 style="margin-top:0">Seller checklist</h3>
+            <ul style="color:var(--muted);margin:0 0 0 18px;padding:0">
+              <li>Service records (if any)</li>
+              <li>Clear photos of exterior, interior and odometer</li>
+              <li>Registration and ownership documents</li>
+            </ul>
+          </div>
+        </div>
+
+        <aside>
+          <div class="info-box form-side">
+            <h3 style="margin-top:0">Quick Sell Form</h3>
+            <form id="sellForm">
+              <label for="owner">Your name</label>
+              <input id="owner" name="owner" type="text" placeholder="Full name" required>
+
+              <label for="phone">Phone</label>
+              <input id="phone" name="phone" type="tel" placeholder="Phone number" required>
+
+              <label for="make">Make & model</label>
+              <input id="make" name="make" type="text" placeholder="e.g., Hyundai Creta">
+
+              <label for="year">Year</label>
+              <input id="year" name="year" type="text" placeholder="Manufacture year">
+
+              <label for="kms">Kilometers driven</label>
+              <input id="kms" name="kms" type="text" placeholder="e.g., 45,000">
+
+              <label for="photos">Photo URLs (one per line)</label>
+              <textarea id="photos" name="photos" placeholder="Paste image URLs here"></textarea>
+
+              <button type="submit" class="cta">Send Inquiry</button>
+            </form>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" aria-labelledby="contact-heading">
+      <h2 class="section-title" id="contact-heading">Contact Us</h2>
+      <p class="muted">Reach out by phone, WhatsApp or email.</p>
+
+      <div class="contact-grid">
+        <div>
+          <div class="info-box">
+            <h3 style="margin-top:0">Contact Details</h3>
+            <p style="margin:0"><strong>Phone:</strong> +91 9824887196</p>
+            <p style="margin:0"><strong>Email:</strong> gajananmotors.dealer@gmail.com</p>
+            <p style="margin:0"><strong>Address:</strong> zunal</p>
+          </div>
+
+          <div class="info-box" style="margin-top:12px">
+            <h3 style="margin-top:0">Visit Us</h3>
+            <p style="margin:0;color:var(--muted)">Visit during business hours for a viewing. Add a map/embed later if needed.</p>
+          </div>
+        </div>
+
+        <aside>
+          <div class="info-box">
+            <h3 style="margin-top:0">Send a Message</h3>
+            <form id="contactForm">
+              <label for="cname">Your name</label>
+              <input id="cname" name="cname" type="text" placeholder="Full name" required>
+
+              <label for="cphone">Phone</label>
+              <input id="cphone" name="cphone" type="tel" placeholder="Phone number" required>
+
+              <label for="cemail">Email</label>
+              <input id="cemail" name="cemail" type="email" placeholder="Email">
+
+              <label for="cmessage">Message</label>
+              <textarea id="cmessage" name="cmessage" placeholder="Your message"></textarea>
+
+              <button type="submit" class="cta">Send Message</button>
+            </form>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div style="text-align:center;color:var(--muted)">© 2026 Gajanan Motors. All Rights Reserved.</div>
+    </div>
+  </footer>
+
+  <!-- Lightbox viewer -->
+  <div id="lightbox" class="lightbox" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="viewer" role="document">
+      <button class="control prev" id="prevBtn" aria-label="Previous image">‹</button>
+      <img id="viewerImg" src="" alt="Full size photo">
+      <button class="control next" id="nextBtn" aria-label="Next image">›</button>
+      <button class="control close" id="closeBtn" aria-label="Close (Esc)">✕</button>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      // Lightbox for the gallery images
+      const thumbs = Array.from(document.querySelectorAll('.image-item'));
+      const images = thumbs.map(t => t.src);
+      const lightbox = document.getElementById('lightbox');
+      const viewerImg = document.getElementById('viewerImg');
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const closeBtn = document.getElementById('closeBtn');
+      let currentIndex = 0;
+
+      function openViewer(idx) {
+        currentIndex = (idx >= 0 && idx < images.length) ? idx : 0;
+        viewerImg.src = images[currentIndex];
+        viewerImg.alt = 'Photo ' + (currentIndex + 1);
+        lightbox.classList.add('open');
+        lightbox.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        closeBtn.focus();
+      }
+      function closeViewer() {
+        lightbox.classList.remove('open');
+        lightbox.setAttribute('aria-hidden', 'true');
+        viewerImg.src = '';
+        document.body.style.overflow = '';
+      }
+      function showNext() {
+        currentIndex = (currentIndex + 1) % images.length;
+        viewerImg.src = images[currentIndex];
+      }
+      function showPrev() {
+        currentIndex = (currentIndex - 1 + images.length) % images.length;
+        viewerImg.src = images[currentIndex];
+      }
+
+      thumbs.forEach((t, i) => t.addEventListener('click', () => openViewer(i)));
+      viewerImg.addEventListener('click', showNext);
+      nextBtn.addEventListener('click', showNext);
+      prevBtn.addEventListener('click', showPrev);
+      closeBtn.addEventListener('click', closeViewer);
+      lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeViewer(); });
+      document.addEventListener('keydown', (e) => {
+        if (lightbox.classList.contains('open')) {
+          if (e.key === 'Escape') closeViewer();
+          if (e.key === 'ArrowRight') showNext();
+          if (e.key === 'ArrowLeft') showPrev();
+        }
+      });
+      viewerImg.addEventListener('load', () => {
+        const next = (currentIndex + 1) % images.length;
+        const p = new Image(); p.src = images[next];
+      });
+
+      // Prevent real form submission (no backend)
+      const sellForm = document.getElementById('sellForm');
+      if (sellForm) sellForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        alert('Thank you — your sell inquiry was recorded locally. To receive inquiries, we can integrate to email or WhatsApp.');
+        sellForm.reset();
+      });
+      const contactForm = document.getElementById('contactForm');
+      if (contactForm) contactForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        alert('Thank you — your message was captured locally. To receive messages, we can integrate to email or WhatsApp.');
+        contactForm.reset();
+      });
+    })();
+  </script>
+</body>
+</html>
